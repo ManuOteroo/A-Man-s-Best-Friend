@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a5d01d9cdf890a543b7fb94aab392cd1
+guid: ee36a55dbe95af843b2ce68ac43587fd
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,33 +110,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CharacterSprint_0
+      name: IdleShootingPosition_0
       rect:
         serializedVersion: 2
-        x: 13
+        x: 21
         y: 11
-        width: 40
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 28fc6ecdffe292b45ad4349a2b30828b
-      internalID: 1389045382
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: CharacterSprint_1
-      rect:
-        serializedVersion: 2
-        x: 85
-        y: 11
-        width: 20
+        width: 22
         height: 51
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -145,19 +124,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f55a9f2142db54c458fd0b857bdc05c3
-      internalID: 1489818113
+      spriteID: b2fdc761b817fc14496e56501232de21
+      internalID: -814706847
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CharacterSprint_2
+      name: IdleShootingPosition_1
       rect:
         serializedVersion: 2
-        x: 144
+        x: 85
         y: 11
-        width: 31
+        width: 22
         height: 50
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -166,20 +145,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ea5004bb682a2b141b5f895ae7b94ed5
-      internalID: -1668892205
+      spriteID: da694e1b4d40b6f40bc2b10e85b41dc3
+      internalID: 1904088045
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CharacterSprint_3
+      name: IdleShootingPosition_2
       rect:
         serializedVersion: 2
-        x: 210
-        y: 10
-        width: 23
-        height: 52
+        x: 149
+        y: 11
+        width: 22
+        height: 50
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -187,8 +166,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0b22c09f79447fa468aaf605c852fc56
-      internalID: 292123669
+      spriteID: 4ba345e8f7774f64da2a5bfc3978fe99
+      internalID: 1807103641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IdleShootingPosition_3
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 11
+        width: 22
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15ab589c1211207468568b3a2a0b3a63
+      internalID: -2081801440
       vertices: []
       indices: 
       edges: []
@@ -204,10 +204,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      CharacterSprint_0: 1389045382
-      CharacterSprint_1: 1489818113
-      CharacterSprint_2: -1668892205
-      CharacterSprint_3: 292123669
+      IdleShootingPosition_0: -814706847
+      IdleShootingPosition_1: 1904088045
+      IdleShootingPosition_2: 1807103641
+      IdleShootingPosition_3: -2081801440
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
