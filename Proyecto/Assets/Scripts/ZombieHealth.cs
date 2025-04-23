@@ -175,5 +175,11 @@ public class ZombieHealth : MonoBehaviour
             TakeDamage(999); 
         }
     }
+
+    public int GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+
 }
 

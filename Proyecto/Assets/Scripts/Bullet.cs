@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour
     public float speed = 20f;
 
     // amount of damage the bullet inflicts
-    public int damage = 50;
+    public int damage = 20;
 
     private Rigidbody2D rb;
 
@@ -38,7 +38,7 @@ public class Bullet : MonoBehaviour
             // Apply damage for a headshot
             if (zombieHealth != null)
             {
-                zombieHealth.TakeDamage(1000);
+                zombieHealth.TakeDamage(70);
             }
 
             // Destroy the bullet after impact
