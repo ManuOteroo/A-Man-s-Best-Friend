@@ -6,7 +6,8 @@ public class ZombieHealth : MonoBehaviour
 {
 
     // Maximum health the zombie can have
-    public int maxHealth = 100;
+    public int maxHealth = 1000;
+
 
     //Zombie´s current health
 
@@ -25,6 +26,7 @@ public class ZombieHealth : MonoBehaviour
 
         // Set initial health
         currentHealth = maxHealth;
+        Debug.Log("Zombie health inicial: " + currentHealth);
 
         //References
         anim = GetComponent<Animator>();

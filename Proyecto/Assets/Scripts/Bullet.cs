@@ -47,17 +47,13 @@ public class Bullet : MonoBehaviour
         // if the bullet hits the zombie's body
         else if (collision.gameObject.CompareTag("Zombie"))
         {
-            // get the ZombieHealth component on the zombie body
-            ZombieHealth zombieHealth = collision.gameObject.GetComponent<ZombieHealth>();
-
-
+            ZombieHealth zombieHealth = collision.gameObject.GetComponentInParent<ZombieHealth>();
 
             if (zombieHealth != null)
             {
                 zombieHealth.TakeDamage(damage);
             }
 
-            // destroy the bullet after hitting the body
             Destroy(gameObject);
         }
         else
