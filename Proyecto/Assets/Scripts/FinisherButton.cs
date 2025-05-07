@@ -5,15 +5,12 @@ using UnityEngine;
 public class FinisherButton : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
-
-   
-
-    // Asigna aquí el nombre del layer que quieres detectar (en este caso, "Player")
     public string targetLayerName = "Player";
     private int targetLayer;
 
     public ZombieHealth zombie;
 
+    private bool playerIsNearby = false;
 
     void Start()
     {
@@ -25,12 +22,24 @@ public class FinisherButton : MonoBehaviour
         targetLayer = LayerMask.NameToLayer(targetLayerName);
     }
 
+    void Update()
+    {
+        // Solo mostramos el botón si el jugador está cerca Y la vida del zombi es baja
+        if (playerIsNearby && zombie != null && zombie.GetCurrentHealth() < 30 && !zombie.isDead)
+        {
+            spriteRenderer.enabled = true;
+        }
+        else
+        {
+            spriteRenderer.enabled = false;
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.layer == targetLayer)
         {
-            spriteRenderer.enabled = true;
-            
+            playerIsNearby = true;
         }
     }
 
@@ -38,13 +47,7 @@ public class FinisherButton : MonoBehaviour
     {
         if (other.gameObject.layer == targetLayer)
         {
-            if (spriteRenderer != null)
-                spriteRenderer.enabled = false;
+            playerIsNearby = false;
         }
     }
-
-   
-
-
-
 }

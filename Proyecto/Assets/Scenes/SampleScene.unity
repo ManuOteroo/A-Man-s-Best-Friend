@@ -99585,7 +99585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dbde998c95f28c48a3ee74d48fc7044, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 200
   isDead: 0
   deathSound: {fileID: 1856747540}
 --- !u!82 &1310113426
@@ -104922,6 +104922,10 @@ PrefabInstance:
     - target: {fileID: 6561748876212584819, guid: 2f8d2e1d11a4c8d458753aea61aa7927, type: 3}
       propertyPath: m_Name
       value: Zombie
+      objectReference: {fileID: 0}
+    - target: {fileID: 8145260582257908971, guid: 2f8d2e1d11a4c8d458753aea61aa7927, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8864338827113386761, guid: 2f8d2e1d11a4c8d458753aea61aa7927, type: 3}
       propertyPath: m_LocalPosition.x

@@ -51,7 +51,7 @@ public class Bullet : MonoBehaviour
 
             if (zombieHealth != null)
             {
-                zombieHealth.TakeDamage(damage);
+                zombieHealth.TakeDamage(30);
             }
 
             Destroy(gameObject);
