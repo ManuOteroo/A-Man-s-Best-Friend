@@ -37,7 +37,7 @@ public class ZombieHealth : MonoBehaviour
         }
     }
 
-    private IEnumerator Die()
+    public IEnumerator Die()
     {
         isDead = true;
 

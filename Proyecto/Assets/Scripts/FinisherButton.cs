@@ -24,14 +24,13 @@ public class FinisherButton : MonoBehaviour
 
     void Update()
     {
-        // Solo mostramos el botón si el jugador está cerca Y la vida del zombi es baja
-        if (playerIsNearby && zombie != null && zombie.GetCurrentHealth() < 30 && !zombie.isDead)
+        bool shouldShow = playerIsNearby && zombie != null && zombie.GetCurrentHealth() < 30 && !zombie.isDead;
+
+        spriteRenderer.enabled = shouldShow;
+
+        if (shouldShow && Input.GetKeyDown(KeyCode.F))
         {
-            spriteRenderer.enabled = true;
-        }
-        else
-        {
-            spriteRenderer.enabled = false;
+            StartCoroutine(zombie.Die());
         }
     }
 
