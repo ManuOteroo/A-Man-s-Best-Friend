@@ -22,6 +22,9 @@ public class Health : MonoBehaviour
     // Sound player makes when dead
     public AudioSource deathSound;
 
+    private SpriteRenderer spriteRenderer;
+
+
     void Start()
     {
         // Set current HP to max at start
@@ -29,6 +32,8 @@ public class Health : MonoBehaviour
 
         // Get Animator component
         anim = GetComponent<Animator>();
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         // If there is no deathSound assigned in Inspector, try to grab AudioSource attached to player
         if (deathSound == null)
@@ -46,7 +51,8 @@ public class Health : MonoBehaviour
 
         // Subtract damage from health
         currentHealth -= damage;
-        
+
+        StartCoroutine(FlashRed());
 
         if (currentHealth <= 0)
         {
@@ -143,5 +149,13 @@ public class Health : MonoBehaviour
             TakeDamage(20); 
         }
     }
+
+    IEnumerator FlashRed()
+    {
+        spriteRenderer.color = new Color(0.9f, 0.25f, 0.05f);
+        yield return new WaitForSeconds(0.5f); // medio segundo
+        spriteRenderer.color = Color.white; // color original del sprite
+    }
+
 
 }

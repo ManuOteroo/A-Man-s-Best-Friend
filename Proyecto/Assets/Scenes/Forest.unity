@@ -1697,6 +1697,14 @@ PrefabInstance:
       propertyPath: MinDistance
       value: 0.9396534
       objectReference: {fileID: 0}
+    - target: {fileID: 4513110023117141709, guid: 42e7ab1f7a521354bb2d0e00d01892c4, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4513110023117141709, guid: 42e7ab1f7a521354bb2d0e00d01892c4, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4953180200333506879, guid: 42e7ab1f7a521354bb2d0e00d01892c4, type: 3}
       propertyPath: m_Name
       value: Gun
@@ -1707,7 +1715,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5617128864790127847, guid: 42e7ab1f7a521354bb2d0e00d01892c4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.012
+      value: 0.272
       objectReference: {fileID: 0}
     - target: {fileID: 5617128864790127847, guid: 42e7ab1f7a521354bb2d0e00d01892c4, type: 3}
       propertyPath: m_LocalPosition.y
