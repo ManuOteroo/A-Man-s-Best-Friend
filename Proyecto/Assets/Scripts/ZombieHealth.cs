@@ -41,15 +41,14 @@ public class ZombieHealth : MonoBehaviour
     {
         isDead = true;
 
-        // Stop AI movement
+        // Stop all movement and behavior
         ZombieMovement zm = GetComponent<ZombieMovement>();
         if (zm != null)
         {
             zm.enabled = false;
-            zm.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         }
 
-        // Play death sound
+        // Stop sound and play death sound
         if (zombieAudio != null)
         {
             zombieAudio.Stop();
@@ -59,48 +58,52 @@ public class ZombieHealth : MonoBehaviour
             }
         }
 
-        // Play death animation
-        if (anim != null)
-        {
-            anim.SetTrigger("Die");
-
-            yield return null;
-
-            // Wait for "Die" to start
-            while (!anim.GetCurrentAnimatorStateInfo(0).IsName("Die"))
-            {
-                yield return null;
-            }
-
-            // Wait for it to fully finish
-            while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
-            {
-                yield return null;
-            }
-
-            // ✅ Snap to last frame and freeze it
-            anim.Play("Die", 0, 0.99f); // Stay on last frame
-            anim.Update(0f); // Apply pose immediately
-            anim.enabled = false; // Freeze the animation here
-        }
-
-        // Freeze physics
+        // Force stop Rigidbody motion and physics
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
             rb.velocity = Vector2.zero;
+            rb.angularVelocity = 0f;
             rb.bodyType = RigidbodyType2D.Kinematic;
             rb.simulated = false;
         }
 
-        // Disable collider
+        // Disable collisions so corpse isn't pushed
         Collider2D col = GetComponent<Collider2D>();
         if (col != null)
         {
             col.enabled = false;
         }
 
-        // Disable this script
+        // Play death animation
+        if (anim != null)
+        {
+            anim.enabled = true;
+            anim.speed = 1f;
+            anim.ResetTrigger("Attack");
+            anim.SetTrigger("Die");
+
+            yield return null;
+
+            // Wait for the "Die" animation to start
+            while (!anim.GetCurrentAnimatorStateInfo(0).IsName("Die"))
+            {
+                yield return null;
+            }
+
+            // Wait until it's finished
+            while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+            {
+                yield return null;
+            }
+
+            // Freeze on last frame
+            anim.Play("Die", 0, 0.99f);
+            anim.Update(0f);
+            anim.enabled = false;
+        }
+
+        // Disable this script after death
         this.enabled = false;
     }
 

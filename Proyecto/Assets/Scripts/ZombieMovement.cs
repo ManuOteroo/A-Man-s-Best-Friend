@@ -18,6 +18,15 @@ public class ZombieMovement : MonoBehaviour
     private bool isAttacking = false;
     private Vector3 originalScale;
 
+    // Animation control
+    public string walkStateName = "Walk"; // Name of the full walk animation
+    public float walkTotalDuration = 1f;  // Total duration of walk animation (in seconds)
+    public int totalFrames = 10;          // Total number of frames in the animation
+    public int loopStartFrame = 4;        // Start looping from this frame
+
+    private bool playedIntro = false;
+    private float loopTimer = 0f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -47,15 +56,51 @@ public class ZombieMovement : MonoBehaviour
         if (distanceToPlayer < followDistance)
         {
             rb.velocity = new Vector2(speed * moveDirection, rb.velocity.y);
+
+            if (!isMoving)
+            {
+                playedIntro = false;
+                loopTimer = 0f;
+                anim.Play(walkStateName, 0, 0f); // Start from beginning
+                anim.speed = 1f; // Allow intro to play
+            }
+
+            AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+
+            if (!playedIntro)
+            {
+                // Wait until the intro section (frames 1–3) finishes
+                float loopStartNormalizedTime = (float)loopStartFrame / totalFrames;
+                if (state.IsName(walkStateName) && state.normalizedTime >= loopStartNormalizedTime)
+                {
+                    playedIntro = true;
+                    loopTimer = 0f;
+                }
+            }
+            else
+            {
+                // Loop frames 4+ manually
+                anim.speed = 0f; // Stop Animator from progressing automatically
+                loopTimer += Time.fixedDeltaTime;
+
+                float loopStart = (float)loopStartFrame / totalFrames;
+                float loopLength = 1f - loopStart;
+                float loopTime = loopStart + (loopTimer % (walkTotalDuration * loopLength)) / (walkTotalDuration * loopLength);
+
+                anim.Play(walkStateName, 0, loopTime);
+                anim.Update(0f); // Apply frame immediately
+            }
+
             isMoving = true;
-            anim.SetBool("IsWalking", true);
             FlipZombie(moveDirection);
         }
         else
         {
             rb.velocity = Vector2.zero;
             isMoving = false;
-            anim.SetBool("IsWalking", false);
+            playedIntro = false;
+            loopTimer = 0f;
+            anim.speed = 1f;
         }
     }
 
@@ -76,7 +121,10 @@ public class ZombieMovement : MonoBehaviour
         if (other.gameObject.CompareTag("Player") && Time.time >= nextAttackTime && !isAttacking)
         {
             rb.velocity = Vector2.zero;
-            anim.SetBool("IsWalking", false);
+            isMoving = false;
+            playedIntro = false;
+            loopTimer = 0f;
+            anim.speed = 1f;
             AttackPlayer(other.GetComponent<Health>());
         }
     }
