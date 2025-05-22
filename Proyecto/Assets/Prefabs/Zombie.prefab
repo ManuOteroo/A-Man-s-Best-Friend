@@ -422,8 +422,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  followDistance: 100
-  attackDamage: 150
+  followDistance: 20
+  attackDamage: 50
   attackCooldown: 1.5
   player: {fileID: 0}
 --- !u!95 &4344300235304823950

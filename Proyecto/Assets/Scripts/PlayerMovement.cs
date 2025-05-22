@@ -29,7 +29,6 @@ public class PlayerMovement : MonoBehaviour
         mainCamera = Camera.main;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-
     void Update()
     {
         Move = Input.GetAxis("Horizontal");
@@ -49,12 +48,25 @@ public class PlayerMovement : MonoBehaviour
             PlayJumpEffect();
         }
 
+        // Set animation parameters
         anim.SetFloat("Speed", Mathf.Abs(Move));
         anim.SetBool("IsRunning", isRunning);
 
-        // Gira hacia el ratón
+        // Flip hacia el ratón
         FlipTowardsMouse();
+
+        // Activar bool de disparo con click derecho
+        if (Input.GetMouseButtonDown(1))
+        {
+            anim.SetBool("IsShooting", true);
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            anim.SetBool("IsShooting", false);
+        }
     }
+
+
 
     void FlipTowardsMouse()
     {

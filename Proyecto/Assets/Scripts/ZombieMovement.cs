@@ -6,7 +6,7 @@ public class ZombieMovement : MonoBehaviour
 {
     public float speed = 2f;
     public float followDistance = 5f;
-    public int attackDamage = 20;
+    public int attackDamage = 1;
     public float attackCooldown = 1.5f;
 
     private float nextAttackTime = 0f;
@@ -89,7 +89,7 @@ public class ZombieMovement : MonoBehaviour
 
         if (playerHealth != null)
         {
-            playerHealth.TakeDamage(attackDamage);
+            playerHealth.TakeDamage(10);
         }
 
         Invoke(nameof(ResetAttack), 1f);

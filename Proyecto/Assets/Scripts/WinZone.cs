@@ -13,6 +13,8 @@ public class WinZone : MonoBehaviour
     // AudioSource component for playing sounds
     private AudioSource audioSource;
 
+    public GameObject sceneManager;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -47,6 +49,8 @@ public class WinZone : MonoBehaviour
 
             // Pause the game
             Time.timeScale = 0f; 
+
+
         }
     }
 
