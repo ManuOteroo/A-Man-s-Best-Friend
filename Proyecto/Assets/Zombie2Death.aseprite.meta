@@ -303,7 +303,7 @@ ScriptedImporter:
     uvTransform: {x: 52, y: 207}
   - name: Frame_9
     originalName: 
-    pivot: {x: 0.50793654, y: -0.88235295}
+    pivot: {x: 0.5150866, y: -0.6968806}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
