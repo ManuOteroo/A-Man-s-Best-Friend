@@ -1,29 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHealthBar : MonoBehaviour
+public class HealthBarUI : MonoBehaviour
 {
-    public Slider healthSlider; 
-    public Health playerHealth; 
-
-
-
-    void Start()
-    {
-        if (healthSlider != null && playerHealth != null)
-        {
-            healthSlider.maxValue = playerHealth.maxHealth;
-            healthSlider.value = playerHealth.GetCurrentHealth();
-        }
-    }
+    public Health targetHealth;       
+    public Image healthBarImage;     
 
     void Update()
     {
-        if (healthSlider != null && playerHealth != null)
+        if (targetHealth != null && healthBarImage != null)
         {
-            healthSlider.value = playerHealth.GetCurrentHealth();
+            float fillAmount = (float)targetHealth.GetCurrentHealth() / targetHealth.maxHealth;
+            healthBarImage.fillAmount = fillAmount;
         }
     }
 }

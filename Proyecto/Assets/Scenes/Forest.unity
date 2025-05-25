@@ -438,8 +438,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e70f879812b654c4bb63dd3fe3ab6570, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthSlider: {fileID: 0}
-  playerHealth: {fileID: 1310113425}
+  targetHealth: {fileID: 0}
+  healthBarImage: {fileID: 0}
 --- !u!4 &210866035
 Transform:
   m_ObjectHideFlags: 0
@@ -2003,7 +2003,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 3.4687502
+  orthographic size: 8.4375
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2028,7 +2028,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -4.5}
+  m_LocalPosition: {x: 0, y: 3.19, z: -4.5}
   m_LocalScale: {x: 0.24599013, y: 0.7699945, z: 0.7699945}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9813,6 +9813,7 @@ GameObject:
   - component: {fileID: 1278717015}
   - component: {fileID: 1278717017}
   - component: {fileID: 1278717016}
+  - component: {fileID: 1278717018}
   m_Layer: 5
   m_Name: FillHealthBar
   m_TagString: Untagged
@@ -9877,6 +9878,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1278717014}
   m_CullTransparentMesh: 1
+--- !u!114 &1278717018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1278717014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e70f879812b654c4bb63dd3fe3ab6570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetHealth: {fileID: 1310113425}
+  healthBarImage: {fileID: 1278717016}
 --- !u!1 &1310113418
 GameObject:
   m_ObjectHideFlags: 0
@@ -10203,14 +10218,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b8160ed8ff63334c8e37237fbb7e411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 1310113423}
-  finisherSound: {fileID: 1207569119}
-  finisherDuration: 1.5
-  isFinishing: 0
-  playerHealthScript: {fileID: 1310113425}
-  finisherCheckRadius: 1.5
-  zombieLayer:
-    m_Bits: 0
 --- !u!1001 &1328437415
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18305,11 +18312,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f3adc5eda18b944f9e0595762b09253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 0}
-  targetLayerName: Player
-  targetLayer: 0
-  zombie: {fileID: 2106936561}
-  playerIsNearby: 0
 --- !u!61 &2016283530
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -18943,17 +18945,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8864338827113386761, guid: 2f8d2e1d11a4c8d458753aea61aa7927, type: 3}
   m_PrefabInstance: {fileID: 2106936559}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2106936561 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8145260582257908971, guid: 2f8d2e1d11a4c8d458753aea61aa7927, type: 3}
-  m_PrefabInstance: {fileID: 2106936559}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62097d150babff84e974497a08e533fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2128475159
 GameObject:
   m_ObjectHideFlags: 0
