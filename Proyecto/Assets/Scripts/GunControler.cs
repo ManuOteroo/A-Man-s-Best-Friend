@@ -100,6 +100,20 @@ public class GunController : MonoBehaviour
         }
     }
 
+    public void PlayerDied()
+    {
+        isDead = true;
+
+        if (gunRenderer != null)
+            gunRenderer.enabled = false;
+
+        if (gunCollider != null)
+            gunCollider.enabled = false;
+
+        // Optional: disable gun animator or hide firepoint
+        if (gunAnimator != null)
+            gunAnimator.enabled = false;
+    }
 
     void Shoot()
     {
@@ -109,7 +123,7 @@ public class GunController : MonoBehaviour
 
         if (currentAmmo <= 0)
         {
-            // ✅ Play empty click sound
+            
             if (emptyClickSound != null)
             {
                 emptyClickSound.Play();
@@ -146,11 +160,11 @@ public class GunController : MonoBehaviour
         // 🔊 Reload sound
         if (reloadSound != null) reloadSound.Play();
 
-        // ✅ Tell Animator if player is walking or not
+        
         bool isWalking = Mathf.Abs(playerRb.velocity.x) > 0.1f;
         gunAnimator.SetBool("IsWalking", isWalking);
 
-        // 🎞️ Trigger the correct reload animation
+       
         gunAnimator.SetTrigger("Reload");
 
         Debug.Log("Reloading...");
@@ -207,19 +221,20 @@ public class GunController : MonoBehaviour
         Vector3 direction = (mousePos - transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
+      
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
-        if (gunRenderer != null)
+       
+        if (mousePos.x < transform.position.x)
         {
-            gunRenderer.flipY = (mousePos.x < transform.position.x);
+            // Flip by scaling vertically
+            transform.localScale = new Vector3(-1, -1, 1);
+        }
+        else
+        {
+            // Normal scale
+            transform.localScale = new Vector3(1, 1, 1);
         }
     }
 
-    public void PlayerDied()
-    {
-        isDead = true;
-        gunRenderer.enabled = false;
-        if (gunCollider != null)
-            gunCollider.enabled = false;
-    }
 }

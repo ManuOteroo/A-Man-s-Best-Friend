@@ -3,117 +3,87 @@ using UnityEngine;
 
 public class ZombieHealth : MonoBehaviour
 {
-    public int maxHealth = 1000;
+    public int maxHealth = 100;
     private int currentHealth;
-    private Animator anim;
+
     public bool isDead = false;
 
-    public AudioSource zombieAudio;
-    public AudioClip idleSound;
-    public AudioClip deathSound;
+    private Animator anim;
 
     void Start()
     {
         currentHealth = maxHealth;
         anim = GetComponent<Animator>();
-
-        if (zombieAudio != null && idleSound != null)
-        {
-            zombieAudio.clip = idleSound;
-            zombieAudio.loop = true;
-            zombieAudio.Play();
-        }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int amount)
     {
         if (isDead) return;
 
-        currentHealth -= damage;
+        currentHealth -= amount;
 
         if (currentHealth <= 0)
         {
-            StartCoroutine(Die());
+            Die();
         }
     }
 
-    public IEnumerator Die()
+    public void Die()
     {
+        if (isDead) return;
         isDead = true;
 
-        // Stop all movement and behavior
-        ZombieMovement zm = GetComponent<ZombieMovement>();
-        if (zm != null)
+        if (anim != null)
         {
-            zm.enabled = false;
+            anim.SetTrigger("Die");
+            StartCoroutine(HoldFinalDeathFrame());
         }
 
-        // Stop sound and play death sound
-        if (zombieAudio != null)
+        ZombieMovement movement = GetComponent<ZombieMovement>();
+        if (movement != null)
         {
-            zombieAudio.Stop();
-            if (deathSound != null)
-            {
-                zombieAudio.PlayOneShot(deathSound);
-            }
+            movement.OnDeath();
         }
 
-        // Force stop Rigidbody motion and physics
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
             rb.velocity = Vector2.zero;
-            rb.angularVelocity = 0f;
-            rb.bodyType = RigidbodyType2D.Kinematic;
-            rb.simulated = false;
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
         }
 
-        // Disable collisions so corpse isn't pushed
-        Collider2D col = GetComponent<Collider2D>();
-        if (col != null)
+        foreach (Collider2D col in GetComponentsInChildren<Collider2D>())
         {
             col.enabled = false;
         }
 
-        // Play death animation
-        if (anim != null)
+        foreach (MonoBehaviour script in GetComponents<MonoBehaviour>())
         {
-            anim.enabled = true;
-            anim.speed = 1f;
-            anim.ResetTrigger("Attack");
-            anim.SetTrigger("Die");
+            if (script != this && !(script is Animator))
+            {
+                script.enabled = false;
+            }
+        }
+    }
+    private IEnumerator HoldFinalDeathFrame()
+    {
+        yield return new WaitForSeconds(0.1f); // let animation trigger start
 
+        // Wait until animation actually enters the Die state
+        while (!anim.GetCurrentAnimatorStateInfo(0).IsName("Die"))
             yield return null;
 
-            // Wait for the "Die" animation to start
-            while (!anim.GetCurrentAnimatorStateInfo(0).IsName("Die"))
-            {
-                yield return null;
-            }
+        // Wait until the animation finishes
+        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.98f)
+            yield return null;
 
-            // Wait until it's finished
-            while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
-            {
-                yield return null;
-            }
-
-            // Freeze on last frame
-            anim.Play("Die", 0, 0.99f);
-            anim.Update(0f);
-            anim.enabled = false;
-        }
-
-        // Disable this script after death
-        this.enabled = false;
+        // Freeze the animator at the last frame
+        AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+        anim.Play(state.fullPathHash, 0, 0.99f);
+        anim.Update(0f);
+        anim.enabled = false;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Spike"))
-        {
-            TakeDamage(999);
-        }
-    }
 
     public int GetCurrentHealth()
     {
