@@ -79,7 +79,7 @@ public class Health : MonoBehaviour
         {
             rb.velocity = Vector2.zero;
 
-            // Freeze only X movement and rotation, allow falling (Y-axis)
+           
             rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         }
 
@@ -87,18 +87,18 @@ public class Health : MonoBehaviour
 
     IEnumerator FreezeAnimatorAfterDeath()
     {
-        // Wait until we're in the Die animation and it's at the end
+     
         yield return new WaitUntil(() =>
             anim.GetCurrentAnimatorStateInfo(0).IsName("Die") &&
             anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f
         );
 
-        // Snap to the final frame exactly
+        
         AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
-        anim.Play(state.fullPathHash, 0, 0.999f); // position at 99.9% through animation
-        anim.Update(0f); // force it to display immediately
+        anim.Play(state.fullPathHash, 0, 0.999f);
+        anim.Update(0f); 
 
-        // Lock pose
+        
         anim.enabled = false;
     }
 

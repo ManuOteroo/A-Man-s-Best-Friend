@@ -37,13 +37,13 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // --- Movement Input ---
+        
         moveInput = Input.GetAxis("Horizontal");
         isRunning = Input.GetKey(KeyCode.LeftShift);
         float currentSpeed = isRunning ? runSpeed : speed;
         rb.velocity = new Vector2(moveInput * currentSpeed, rb.velocity.y);
 
-        // --- Ground Check ---
+        
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
         if (isGrounded && rb.velocity.y <= 0.01f)
@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
             anim.SetBool("IsJumping", false);
         }
 
-        // --- Jumping ---
+        
         if (Input.GetButtonDown("Jump") && jumpCount > 0)
         {
             rb.velocity = new Vector2(rb.velocity.x, jump);
@@ -67,10 +67,10 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        // --- Flip based on mouse ---
+       
         FlipTowardsMouse();
 
-        // Aiming — completely disabled if jumping
+        
         bool isJumping = anim.GetBool("IsJumping");
         bool isAiming = Input.GetMouseButton(1) && !isJumping;
 
@@ -78,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-        // --- Walking logic ---
+       
         bool isWalking = Mathf.Abs(moveInput) > 0.1f && isGrounded;
         anim.SetBool("isWalking", isWalking);
         anim.SetBool("IsRunning", isRunning);

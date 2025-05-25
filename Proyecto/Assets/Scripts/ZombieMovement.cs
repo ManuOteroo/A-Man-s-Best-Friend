@@ -19,12 +19,12 @@ public class ZombieMovement : MonoBehaviour
     private bool isDead = false;
     private Vector3 originalScale;
 
-    // Walk animation control
+    
     [Header("Walk Animation Loop Settings")]
-    public string walkStateName = "Walk";  // Must match Animator state name
-    public float walkTotalDuration = 1f;   // Total length of walk animation in seconds
-    public int totalFrames = 10;           // Total frame count in the animation
-    public int loopStartFrame = 4;         // Frame to start looping from
+    public string walkStateName = "Walk";  
+    public float walkTotalDuration = 1f;  
+    public int totalFrames = 10;           
+    public int loopStartFrame = 4;         
 
     private bool playedIntro = false;
     private float loopTimer = 0f;
@@ -157,7 +157,7 @@ public class ZombieMovement : MonoBehaviour
         isAttacking = false;
     }
 
-    // Called by ZombieHealth when zombie dies
+    
     public void OnDeath()
     {
         isDead = true;

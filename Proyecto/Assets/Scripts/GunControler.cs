@@ -92,7 +92,7 @@ public class GunController : MonoBehaviour
             StartCoroutine(Reload());
         }
 
-        // Optional: Gun walk anim
+        
         bool isWalking = Mathf.Abs(playerRb.velocity.x) > 0.01f;
         if (gunAnimator != null)
         {
@@ -110,7 +110,7 @@ public class GunController : MonoBehaviour
         if (gunCollider != null)
             gunCollider.enabled = false;
 
-        // Optional: disable gun animator or hide firepoint
+        
         if (gunAnimator != null)
             gunAnimator.enabled = false;
     }

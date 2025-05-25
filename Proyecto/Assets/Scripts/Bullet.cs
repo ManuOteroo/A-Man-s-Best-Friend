@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    // speed at which the bullet travels
+    
     public float speed = 20f;
 
-    // amount of damage the bullet inflicts
+    
     public int damage = 20;
 
     private Rigidbody2D rb;
@@ -26,22 +26,22 @@ public class Bullet : MonoBehaviour
         rb.velocity = transform.right * speed;
     }
 
-    // Called when the bullet collides with another collider
+    
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // if the bulet hits a zombie's head
+        
         if (collision.gameObject.CompareTag("ZombieHead"))
         {
-            // access the parent GameObject that holds the ZombieHealth script
+            
             ZombieHealth zombieHealth = collision.transform.parent.GetComponent<ZombieHealth>();
 
-            // Apply damage for a headshot
+            
             if (zombieHealth != null)
             {
                 zombieHealth.TakeDamage(70);
             }
 
-            // Destroy the bullet after impact
+            
             Destroy(gameObject);
         }
         // if the bullet hits the zombie's body
