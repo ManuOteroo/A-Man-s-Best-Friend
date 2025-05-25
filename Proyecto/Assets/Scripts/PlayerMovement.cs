@@ -13,31 +13,34 @@ public class PlayerMovement : MonoBehaviour
 
     private int jumpCount;
     private bool isRunning;
-    private float Move;
+    private float moveInput;
     public Rigidbody2D rb;
     private Animator anim;
     public bool isJumping;
 
     private Camera mainCamera;
     private SpriteRenderer spriteRenderer;
+    private Vector3 originalScale;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-
-        mainCamera = Camera.main;
         spriteRenderer = GetComponent<SpriteRenderer>();
+        mainCamera = Camera.main;
+        originalScale = transform.localScale;
     }
+
     void Update()
     {
-        Move = Input.GetAxis("Horizontal");
+        // --- Movement ---
+        moveInput = Input.GetAxis("Horizontal");
         isRunning = Input.GetKey(KeyCode.LeftShift);
         float currentSpeed = isRunning ? runSpeed : speed;
 
-        rb.velocity = new Vector2(currentSpeed * Move, rb.velocity.y);
+        rb.velocity = new Vector2(currentSpeed * moveInput, rb.velocity.y);
 
-        // Saltar
+        // --- Jumping ---
         if (Input.GetButtonDown("Jump") && jumpCount > 0)
         {
             rb.velocity = new Vector2(rb.velocity.x, jump);
@@ -48,32 +51,35 @@ public class PlayerMovement : MonoBehaviour
             PlayJumpEffect();
         }
 
-        // Set animation parameters
-        anim.SetFloat("Speed", Mathf.Abs(Move));
-        anim.SetBool("IsRunning", isRunning);
+        // --- Aiming ---
+        bool isAiming = Input.GetMouseButton(1); // Right-click to aim
+        anim.SetBool("IsShooting", isAiming);
 
-        // Flip hacia el ratón
+        // --- Flipping towards mouse ---
         FlipTowardsMouse();
 
-        // Activar bool de disparo con click derecho
-        if (Input.GetMouseButtonDown(1))
-        {
-            anim.SetBool("IsShooting", true);
-        }
-        if (Input.GetMouseButtonUp(1))
-        {
-            anim.SetBool("IsShooting", false);
-        }
+        // --- Animation states ---
+        bool isWalking = Mathf.Abs(moveInput) > 0.1f && !isJumping;
+
+        anim.SetFloat("Speed", Mathf.Abs(moveInput));
+        anim.SetBool("IsRunning", isRunning);
+        anim.SetBool("isWalking", isWalking);
+        anim.SetBool("isAiming", isAiming);
     }
-
-
 
     void FlipTowardsMouse()
     {
-        Vector3 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 0;
-        bool isFacingLeft = mousePos.x < transform.position.x;
-        spriteRenderer.flipX = isFacingLeft;
+        Vector3 mouseWorld = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        bool isFacingLeft = mouseWorld.x < transform.position.x;
+
+        float direction = isFacingLeft ? -1f : 1f;
+
+        // Flip entire player (including gun and firepoint)
+        transform.localScale = new Vector3(
+            Mathf.Abs(originalScale.x) * direction,
+            originalScale.y,
+            originalScale.z
+        );
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -86,14 +92,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void PlayJumpEffect()
-    {
-        if (jumpEffect != null)
-        {
-            jumpEffect.Play();
-        }
-    }
-
-    void PlayjumpEffect()
     {
         if (jumpEffect != null)
         {

@@ -77,15 +77,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4349605969610376142, guid: 88597eec3883a644390c21cde4c2797d, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.16, y: 0.06}
+  m_Size: {x: 0.43, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
 --- !u!114 &9032237042196623212
@@ -106,7 +106,6 @@ MonoBehaviour:
   fireRate: 50
   gunAnimator: {fileID: 1953778639684905570}
   gunSound: {fileID: 456547226660740769}
-  armAnimator: {fileID: 1953778639684905570}
 --- !u!95 &1953778639684905570
 Animator:
   serializedVersion: 5
@@ -117,7 +116,7 @@ Animator:
   m_GameObject: {fileID: 4953180200333506879}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d9ac3d2134a9ecb4a94bc069056a8175, type: 2}
+  m_Controller: {fileID: -5542896180891254485, guid: b2bb52574dfe1fc47bad916581864b78, type: 3}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
