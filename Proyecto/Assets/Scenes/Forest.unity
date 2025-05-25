@@ -1416,10 +1416,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: -0.47347078
+    x: -0.062109377
     y: 0
-    width: 1.9466035
-    height: 1
+    width: 1.125
+    height: 0.9982892
   near clip plane: 2.11
   far clip plane: 1000
   field of view: 34
@@ -2471,7 +2471,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9032237042196623212, guid: 42e7ab1f7a521354bb2d0e00d01892c4, type: 3}
       propertyPath: fireRate
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 9032237042196623212, guid: 42e7ab1f7a521354bb2d0e00d01892c4, type: 3}
       propertyPath: playerRb
@@ -7675,6 +7675,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1109577432}
   m_CullTransparentMesh: 1
+--- !u!1 &1122263400
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1122263401}
+  m_Layer: 0
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1122263401
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1122263400}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.008325946, y: -0.042884324, z: 1.1895487}
+  m_LocalScale: {x: 0.22441821, y: 0.22574705, z: 1.242177}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1310113421}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1210952370
 GameObject:
   m_ObjectHideFlags: 0
@@ -7990,6 +8021,7 @@ Transform:
   - {fileID: 1034528491}
   - {fileID: 1277584515}
   - {fileID: 1457305492}
+  - {fileID: 1122263401}
   m_Father: {fileID: 1856747539}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1310113423
@@ -8026,13 +8058,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  jump: 6
+  jump: 5
   runSpeed: 7
-  maxJumps: 2
+  maxJumps: 1
   jumpSound: {fileID: 1310113426}
   jumpEffect: {fileID: 1034528490}
+  groundCheck: {fileID: 1122263401}
+  groundCheckRadius: 0.2
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
   rb: {fileID: 1310113419}
-  isJumping: 0
 --- !u!114 &1310113425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8045,7 +8081,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dbde998c95f28c48a3ee74d48fc7044, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 10
   isDead: 0
   deathSound: {fileID: 1856747540}
 --- !u!82 &1310113426
@@ -8901,7 +8937,7 @@ GameObject:
   - component: {fileID: 1655342397}
   - component: {fileID: 1655342396}
   - component: {fileID: 1655342395}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -91,6 +91,21 @@ public class GunController : MonoBehaviour
         Debug.Log("Gun IsWalking: " + gunAnimator.GetBool("IsWalking"));
         Debug.Log("Current Gun State: " + gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("GunWalking"));
 
+        // Only show gun if aiming AND not jumping
+        if (playerAnimator != null && gunRenderer != null)
+        {
+            bool isJumping = playerAnimator.GetBool("IsJumping");
+            bool isAiming = playerAnimator.GetBool("isAiming");
+
+            bool showGun = isAiming && !isJumping;
+
+            gunRenderer.enabled = showGun;
+
+            if (gunCollider != null)
+                gunCollider.enabled = showGun;
+        }
+
+
 
     }
 
@@ -173,5 +188,15 @@ public class GunController : MonoBehaviour
         gunRenderer.enabled = false;
         if (gunCollider != null)
             gunCollider.enabled = false;
+
+        // Freeze movement on death
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.velocity = Vector2.zero;
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        }
+
     }
+
 }
