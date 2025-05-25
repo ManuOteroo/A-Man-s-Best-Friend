@@ -37,6 +37,8 @@ public class GunController : MonoBehaviour
     public Animator playerAnimator;
     public AudioSource gunSound;
     public AudioSource reloadSound;
+    public AudioSource emptyClickSound; 
+
 
     private bool isDead = false;
 
@@ -84,12 +86,13 @@ public class GunController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        
+        if (Input.GetKeyDown(KeyCode.R) && currentAmmo < maxAmmo)
         {
             StartCoroutine(Reload());
         }
 
-        // Optional: update walk anim
+        // Optional: Gun walk anim
         bool isWalking = Mathf.Abs(playerRb.velocity.x) > 0.01f;
         if (gunAnimator != null)
         {
@@ -97,9 +100,24 @@ public class GunController : MonoBehaviour
         }
     }
 
+
     void Shoot()
     {
-        if (Time.time < nextFireTime || currentAmmo <= 0 || isReloading) return;
+        if (isDead || isReloading) return;
+
+        if (Time.time < nextFireTime) return;
+
+        if (currentAmmo <= 0)
+        {
+            // ✅ Play empty click sound
+            if (emptyClickSound != null)
+            {
+                emptyClickSound.Play();
+            }
+
+            Debug.Log("Click! Out of ammo.");
+            return;
+        }
 
         nextFireTime = Time.time + fireRate;
         currentAmmo--;
@@ -116,18 +134,25 @@ public class GunController : MonoBehaviour
         if (gunSound != null) gunSound.Play();
         if (gunAnimator != null) gunAnimator.SetTrigger("Shoot");
         if (playerAnimator != null) playerAnimator.SetTrigger("Shoot");
-
-        if (currentAmmo <= 0)
-        {
-            StartCoroutine(Reload());
-        }
     }
+
+
+
 
     IEnumerator Reload()
     {
         isReloading = true;
 
+        // 🔊 Reload sound
         if (reloadSound != null) reloadSound.Play();
+
+        // ✅ Tell Animator if player is walking or not
+        bool isWalking = Mathf.Abs(playerRb.velocity.x) > 0.1f;
+        gunAnimator.SetBool("IsWalking", isWalking);
+
+        // 🎞️ Trigger the correct reload animation
+        gunAnimator.SetTrigger("Reload");
+
         Debug.Log("Reloading...");
 
         yield return new WaitForSeconds(reloadTime);
@@ -139,22 +164,24 @@ public class GunController : MonoBehaviour
         Debug.Log("Reload complete.");
     }
 
+
+
+
     void UpdateAmmoUI()
     {
         for (int i = 0; i < bulletIcons.Count; i++)
         {
             if (i < currentAmmo)
             {
-                bulletIcons[i].enabled = true;  // show bullet
+                bulletIcons[i].enabled = true;  // Show bullet
             }
             else
             {
-                bulletIcons[i].enabled = false; // hide bullet
+                bulletIcons[i].enabled = false; //  Hide bullet completely
             }
         }
-        Debug.Log("Updating Ammo: " + currentAmmo);
-
     }
+
 
 
 
