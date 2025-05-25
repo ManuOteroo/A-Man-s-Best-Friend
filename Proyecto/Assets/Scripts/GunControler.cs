@@ -1,15 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
+
 
 public class GunController : MonoBehaviour
 {
+    [Header("Shooting")]
     public GameObject bulletPrefab;
     public Transform firePoint;
     public float bulletSpeed = 20f;
     public float fireRate = 1f;
     private float nextFireTime = 0f;
 
+    [Header("Ammo Settings")]
+    public int maxAmmo = 5;
+    private int currentAmmo;
+    public float reloadTime = 1.5f;
+    private bool isReloading = false;
+
+    [Header("UI Ammo Display")]
+    public List<Image> bulletIcons;         // Assign 5 UI bullet icons
+    public Sprite bulletFullSprite;         // Bullet visible
+    public Sprite bulletEmptySprite;        // Bullet empty
+
+    [Header("References")]
     private Camera mainCamera;
     private SpriteRenderer playerSprite;
     private SpriteRenderer gunRenderer;
@@ -17,43 +33,31 @@ public class GunController : MonoBehaviour
     private Vector3 originalPlayerScale;
     private Rigidbody2D playerRb;
 
-
-
-    public Animator gunAnimator;      // Animator for the gun 
-    public Animator playerAnimator;   
+    public Animator gunAnimator;
+    public Animator playerAnimator;
     public AudioSource gunSound;
+    public AudioSource reloadSound;
 
     private bool isDead = false;
 
     void Start()
     {
         playerRb = transform.parent.GetComponent<Rigidbody2D>();
-
-        if (playerRb != null)
-        {
-            float horizontalSpeed = Mathf.Abs(playerRb.velocity.x);
-
-            bool isWalking = horizontalSpeed > 0.1f;
-
-            gunAnimator.SetBool("IsWalking", isWalking);
-
-            Debug.Log("GunController IsWalking: " + isWalking + " (velocity.x = " + horizontalSpeed + ")");
-        }
-
-
         mainCamera = Camera.main;
         playerSprite = transform.parent.GetComponent<SpriteRenderer>();
         gunRenderer = GetComponent<SpriteRenderer>();
         gunCollider = GetComponent<Collider2D>();
         originalPlayerScale = transform.parent.localScale;
 
-      
         if (playerAnimator == null)
         {
             playerAnimator = transform.parent.GetComponent<Animator>();
         }
 
-        // Hide gun at start
+        currentAmmo = maxAmmo;
+        UpdateAmmoUI();
+
+        // Hide gun initially
         gunRenderer.enabled = false;
         if (gunCollider != null)
             gunCollider.enabled = false;
@@ -61,11 +65,10 @@ public class GunController : MonoBehaviour
 
     void Update()
     {
-        if (isDead) return;
+        if (isDead || isReloading) return;
 
-        bool aiming = Input.GetMouseButton(1); // Right-click to aim
+        bool aiming = Input.GetMouseButton(1);
 
-        // Show/hide the gun sprite
         gunRenderer.enabled = aiming;
         if (gunCollider != null)
             gunCollider.enabled = aiming;
@@ -75,39 +78,85 @@ public class GunController : MonoBehaviour
             FlipPlayerToFaceMouse();
             AimGun();
 
-            if (Input.GetMouseButtonDown(0)) // Left-click to shoot
+            if (Input.GetMouseButtonDown(0))
             {
                 Shoot();
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(Reload());
+        }
 
-        bool IsWalking = Mathf.Abs(playerRb.velocity.x) > 0.01f;
-
+        // Optional: update walk anim
+        bool isWalking = Mathf.Abs(playerRb.velocity.x) > 0.01f;
         if (gunAnimator != null)
         {
-            gunAnimator.SetBool("IsWalking", IsWalking);
+            gunAnimator.SetBool("IsWalking", isWalking);
         }
-        Debug.Log("Gun IsWalking: " + gunAnimator.GetBool("IsWalking"));
-        Debug.Log("Current Gun State: " + gunAnimator.GetCurrentAnimatorStateInfo(0).IsName("GunWalking"));
+    }
 
-        // Only show gun if aiming AND not jumping
-        if (playerAnimator != null && gunRenderer != null)
+    void Shoot()
+    {
+        if (Time.time < nextFireTime || currentAmmo <= 0 || isReloading) return;
+
+        nextFireTime = Time.time + fireRate;
+        currentAmmo--;
+        UpdateAmmoUI();
+
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        if (rb != null)
         {
-            bool isJumping = playerAnimator.GetBool("IsJumping");
-            bool isAiming = playerAnimator.GetBool("isAiming");
-
-            bool showGun = isAiming && !isJumping;
-
-            gunRenderer.enabled = showGun;
-
-            if (gunCollider != null)
-                gunCollider.enabled = showGun;
+            Vector2 shootDirection = firePoint.up.normalized;
+            rb.velocity = shootDirection * bulletSpeed;
         }
 
+        if (gunSound != null) gunSound.Play();
+        if (gunAnimator != null) gunAnimator.SetTrigger("Shoot");
+        if (playerAnimator != null) playerAnimator.SetTrigger("Shoot");
 
+        if (currentAmmo <= 0)
+        {
+            StartCoroutine(Reload());
+        }
+    }
+
+    IEnumerator Reload()
+    {
+        isReloading = true;
+
+        if (reloadSound != null) reloadSound.Play();
+        Debug.Log("Reloading...");
+
+        yield return new WaitForSeconds(reloadTime);
+
+        currentAmmo = maxAmmo;
+        UpdateAmmoUI();
+        isReloading = false;
+
+        Debug.Log("Reload complete.");
+    }
+
+    void UpdateAmmoUI()
+    {
+        for (int i = 0; i < bulletIcons.Count; i++)
+        {
+            if (i < currentAmmo)
+            {
+                bulletIcons[i].enabled = true;  // show bullet
+            }
+            else
+            {
+                bulletIcons[i].enabled = false; // hide bullet
+            }
+        }
+        Debug.Log("Updating Ammo: " + currentAmmo);
 
     }
+
+
 
     void FlipPlayerToFaceMouse()
     {
@@ -121,7 +170,6 @@ public class GunController : MonoBehaviour
         );
     }
 
-
     void AimGun()
     {
         if (isDead) return;
@@ -132,71 +180,19 @@ public class GunController : MonoBehaviour
         Vector3 direction = (mousePos - transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-        // Rotate the gun
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
-        // Flip the gun sprite by scaling Y if aiming left
-        if (mousePos.x < transform.position.x)
+        if (gunRenderer != null)
         {
-            transform.localScale = new Vector3(-1, -1, 1); // flip vertically
-        }
-        else
-        {
-            transform.localScale = new Vector3(1, 1, 1); // normal
-        }
-    }
-
-
-
-
-    void Shoot()
-    {
-        if (isDead || bulletPrefab == null || firePoint == null) return;
-        if (Time.time < nextFireTime) return;
-
-        nextFireTime = Time.time + fireRate;
-
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        if (rb != null)
-        {
-            Vector2 shootDirection = firePoint.up.normalized;
-            rb.velocity = shootDirection * bulletSpeed;
-        }
-
-        if (gunSound != null)
-        {
-            gunSound.Play();
-        }
-
-        if (gunAnimator != null)
-        {
-            gunAnimator.SetTrigger("Shoot");
-        }
-
-        if (playerAnimator != null)
-        {
-            playerAnimator.SetTrigger("Shoot"); 
+            gunRenderer.flipY = (mousePos.x < transform.position.x);
         }
     }
 
     public void PlayerDied()
     {
         isDead = true;
-        playerSprite.flipX = false;
-
         gunRenderer.enabled = false;
         if (gunCollider != null)
             gunCollider.enabled = false;
-
-        // Freeze movement on death
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
-        {
-            rb.velocity = Vector2.zero;
-            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-        }
-
     }
-
 }
