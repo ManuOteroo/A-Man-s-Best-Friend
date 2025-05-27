@@ -19,12 +19,11 @@ public class ZombieMovement : MonoBehaviour
     private bool isDead = false;
     private Vector3 originalScale;
 
-    
     [Header("Walk Animation Loop Settings")]
-    public string walkStateName = "Walk";  
-    public float walkTotalDuration = 1f;  
-    public int totalFrames = 10;           
-    public int loopStartFrame = 4;         
+    public string walkStateName = "Walk";
+    public float walkTotalDuration = 1.75f;
+    public int loopStartFrame = 10;
+    public int loopEndFrame = 21;
 
     private bool playedIntro = false;
     private float loopTimer = 0f;
@@ -52,8 +51,6 @@ public class ZombieMovement : MonoBehaviour
 
     void FollowPlayer()
     {
-        if (isDead) return;
-
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         int moveDirection = (player.position.x > transform.position.x) ? 1 : -1;
 
@@ -61,37 +58,42 @@ public class ZombieMovement : MonoBehaviour
         {
             rb.velocity = new Vector2(speed * moveDirection, rb.velocity.y);
 
-            if (!isMoving)
-            {
-                // Play full walk animation from the beginning
-                playedIntro = false;
-                loopTimer = 0f;
-                anim.Play(walkStateName, 0, 0f);
-                anim.speed = 1f;
-            }
-
             AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+
+            float loopStartNorm = (float)(loopStartFrame - 1) / loopEndFrame;
 
             if (!playedIntro)
             {
-                float loopStartNormalizedTime = (float)loopStartFrame / totalFrames;
-                if (state.IsName(walkStateName) && state.normalizedTime >= loopStartNormalizedTime)
+                if (!isMoving || !state.IsName(walkStateName))
+                {
+                    anim.speed = 1f;
+                    anim.Play(walkStateName, 0, 0f);
+                }
+
+                if (state.IsName(walkStateName) && state.normalizedTime >= loopStartNorm)
                 {
                     playedIntro = true;
                     loopTimer = 0f;
+                    anim.speed = 0f;
                 }
             }
             else
             {
-                // Manually loop only frames 4 to 10
-                anim.speed = 0f;
+                // Force animation to stay in the loop range
+                if (!state.IsName(walkStateName))
+                {
+                    anim.Play(walkStateName, 0, (float)(loopStartFrame - 1) / loopEndFrame);
+                    anim.Update(0f);
+                    loopTimer = 0f;
+                }
+
                 loopTimer += Time.fixedDeltaTime;
 
-                float loopStart = (float)loopStartFrame / totalFrames;
-                float loopLength = 1f - loopStart;
-                float loopTime = loopStart + (loopTimer % (walkTotalDuration * loopLength)) / (walkTotalDuration * loopLength);
+                float loopStart = (float)(loopStartFrame - 1) / loopEndFrame;
+                float loopLength = (float)(loopEndFrame - loopStartFrame + 1) / loopEndFrame;
+                float loopNormalizedTime = loopStart + (loopTimer % (walkTotalDuration * loopLength)) / (walkTotalDuration * loopLength);
 
-                anim.Play(walkStateName, 0, loopTime);
+                anim.Play(walkStateName, 0, loopNormalizedTime);
                 anim.Update(0f);
             }
 
@@ -112,11 +114,11 @@ public class ZombieMovement : MonoBehaviour
     {
         if (moveDirection > 0)
         {
-            transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z); // Face right
+            transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
         }
-        else
+        else if (moveDirection < 0)
         {
-            transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z); // Face left
+            transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
         }
     }
 
@@ -143,7 +145,6 @@ public class ZombieMovement : MonoBehaviour
         anim.SetTrigger("Attack");
         nextAttackTime = Time.time + attackCooldown;
 
-
         if (playerHealth != null)
         {
             playerHealth.TakeDamage(attackDamage);
@@ -157,7 +158,6 @@ public class ZombieMovement : MonoBehaviour
         isAttacking = false;
     }
 
-    
     public void OnDeath()
     {
         isDead = true;
