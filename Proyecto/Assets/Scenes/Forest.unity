@@ -2012,15 +2012,15 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: -0.5744681
     y: 0
-    width: 1
-    height: 1
+    width: 2.1500561
+    height: 0.9986245
   near clip plane: 2.11
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 8.4375
+  orthographic size: 5.671875
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
