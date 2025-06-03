@@ -21,8 +21,7 @@ public class BirdEnemy : MonoBehaviour
 
     void Start()
     {
-        transform.localScale = Vector3.one; // Fix scale in case animation messes it up
-
+        transform.localScale = Vector3.one;
         startPosition = transform.position + idleOffset;
         animator = GetComponent<Animator>();
         birdCollider = GetComponent<Collider2D>();
@@ -73,16 +72,17 @@ public class BirdEnemy : MonoBehaviour
             animator.SetTrigger("Die");
 
         if (birdCollider != null)
-            birdCollider.enabled = false;
+            birdCollider.isTrigger = false; // Allow collision with ground
 
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
+            rb.bodyType = RigidbodyType2D.Dynamic;
             rb.gravityScale = 1f;
             rb.velocity = Vector2.zero;
         }
 
-        Destroy(gameObject, 5f); // Optional: destroy after death animation
+        Destroy(gameObject, 5f);
     }
 
     System.Collections.IEnumerator AttackPlayer()
@@ -102,7 +102,7 @@ public class BirdEnemy : MonoBehaviour
             yield return null;
         }
 
-        // ✅ Deal damage directly
+        // Damage the player directly
         Health playerHealth = player.GetComponent<Health>();
         if (playerHealth != null && !playerHealth.isDead)
         {
@@ -126,19 +126,17 @@ public class BirdEnemy : MonoBehaviour
         isAttacking = false;
     }
 
-
-
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Bird"))
+        if (isDead) return;
+
+        if (other.CompareTag("Player"))
         {
-            BirdEnemy bird = other.GetComponent<BirdEnemy>();
-            if (bird != null)
+            Health playerHealth = other.GetComponent<Health>();
+            if (playerHealth != null && !playerHealth.isDead)
             {
-                bird.TakeDamage(10);
-                Destroy(gameObject); // Destroy bullet
+                playerHealth.TakeDamage(20);
             }
         }
     }
-
 }
