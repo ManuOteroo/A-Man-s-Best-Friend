@@ -18,13 +18,29 @@ public class BirdEnemy : MonoBehaviour
     private float lastAttackTime;
     private Animator animator;
     private Collider2D birdCollider;
+    private Rigidbody2D rb;
 
     void Start()
     {
-        transform.localScale = Vector3.one;
+        
+
         startPosition = transform.position + idleOffset;
         animator = GetComponent<Animator>();
         birdCollider = GetComponent<Collider2D>();
+        rb = GetComponent<Rigidbody2D>();
+
+        if (rb != null)
+        {
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.velocity = Vector2.zero;
+            rb.gravityScale = 0f;
+        }
+
+        if (birdCollider != null)
+        {
+            birdCollider.isTrigger = true;
+        }
+
         lastAttackTime = -attackCooldown;
     }
 
@@ -48,7 +64,7 @@ public class BirdEnemy : MonoBehaviour
     {
         transform.position = startPosition + new Vector3(0, Mathf.Sin(Time.time * 2f) * 0.5f, 0);
         Vector3 direction = player.position - transform.position;
-        transform.right = direction.normalized;
+        transform.right = -direction.normalized; // For left-facing sprites
     }
 
     public void TakeDamage(int damage)
@@ -69,12 +85,14 @@ public class BirdEnemy : MonoBehaviour
         StopAllCoroutines();
 
         if (animator != null)
+        {
             animator.SetTrigger("Die");
+            StartCoroutine(FreezeAnimatorAfterDeath());
+        }
 
         if (birdCollider != null)
-            birdCollider.isTrigger = false; // Allow collision with ground
+            birdCollider.isTrigger = false;
 
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
             rb.bodyType = RigidbodyType2D.Dynamic;
@@ -82,23 +100,24 @@ public class BirdEnemy : MonoBehaviour
             rb.velocity = Vector2.zero;
         }
 
+        StartCoroutine(SnapToGroundAfterFall());
+
         Destroy(gameObject, 5f);
     }
 
-    System.Collections.IEnumerator AttackPlayer()
+    IEnumerator AttackPlayer()
     {
         isAttacking = true;
 
         if (animator != null)
             animator.SetBool("IsAttacking", true);
 
-        Vector3 attackTarget = player.position + Vector3.up * 0.5f;
-
-        while (Vector3.Distance(transform.position, attackTarget) > 0.3f && !isDead)
+        while (Vector3.Distance(transform.position, player.position + Vector3.up * 0.5f) > 0.3f && !isDead)
         {
-            transform.position = Vector3.MoveTowards(transform.position, attackTarget, attackSpeed * Time.deltaTime);
-            Vector3 direction = player.position - transform.position;
-            transform.right = direction.normalized;
+            Vector3 dynamicTarget = player.position + Vector3.up * 0.5f;
+            transform.position = Vector3.MoveTowards(transform.position, dynamicTarget, attackSpeed * Time.deltaTime);
+            Vector3 direction = dynamicTarget - transform.position;
+            transform.right = -direction.normalized;
             yield return null;
         }
 
@@ -115,7 +134,7 @@ public class BirdEnemy : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(transform.position, startPosition, returnSpeed * Time.deltaTime);
             Vector3 direction = player.position - transform.position;
-            transform.right = direction.normalized;
+            transform.right = -direction.normalized;
             yield return null;
         }
 
@@ -137,6 +156,33 @@ public class BirdEnemy : MonoBehaviour
             {
                 playerHealth.TakeDamage(20);
             }
+        }
+    }
+
+    IEnumerator FreezeAnimatorAfterDeath()
+    {
+        yield return new WaitUntil(() =>
+            animator.GetCurrentAnimatorStateInfo(0).IsName("Die") &&
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f
+        );
+
+        AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+        animator.Play(state.fullPathHash, 0, 0.999f);
+        animator.Update(0f);
+        animator.enabled = false;
+    }
+
+    IEnumerator SnapToGroundAfterFall()
+    {
+        yield return new WaitForSeconds(0.3f);
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 5f, LayerMask.GetMask("Ground"));
+        if (hit.collider != null)
+        {
+            Bounds bounds = birdCollider.bounds;
+            Vector3 newPos = transform.position;
+            newPos.y = hit.point.y + bounds.extents.y;
+            transform.position = newPos;
         }
     }
 }

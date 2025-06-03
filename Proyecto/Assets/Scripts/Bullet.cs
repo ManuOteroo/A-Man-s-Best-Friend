@@ -12,46 +12,49 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
         if (rb != null)
         {
             rb.velocity = transform.right * speed;
         }
     }
 
+    // 💥 Detect collisions with zombies
     void OnCollisionEnter2D(Collision2D collision)
     {
-        GameObject hitObject = collision.gameObject;
+        GameObject hit = collision.gameObject;
 
-        // 🎯 Hit zombie head
-        if (hitObject.CompareTag("ZombieHead"))
+        if (hit.CompareTag("ZombieHead"))
         {
-            ZombieHealth zombieHealth = hitObject.transform.parent.GetComponent<ZombieHealth>();
+            ZombieHealth zombieHealth = hit.transform.parent.GetComponent<ZombieHealth>();
             if (zombieHealth != null)
             {
                 zombieHealth.TakeDamage(70);
             }
         }
-        // 💀 Hit zombie body
-        else if (hitObject.CompareTag("Zombie"))
+        else if (hit.CompareTag("Zombie"))
         {
-            ZombieHealth zombieHealth = hitObject.GetComponentInParent<ZombieHealth>();
+            ZombieHealth zombieHealth = hit.GetComponentInParent<ZombieHealth>();
             if (zombieHealth != null)
             {
                 zombieHealth.TakeDamage(30);
             }
         }
-        // 🐦 Hit bird enemy
-        else if (hitObject.CompareTag("Bird"))
+
+        Destroy(gameObject);
+    }
+
+    // 🐦 Detect trigger hits with birds
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Bird"))
         {
-            BirdEnemy bird = hitObject.GetComponent<BirdEnemy>();
+            BirdEnemy bird = other.GetComponent<BirdEnemy>();
             if (bird != null)
             {
-                bird.TakeDamage(damage); // Use bullet damage value
+                bird.TakeDamage(damage);
             }
-        }
 
-        // Destroy bullet on any hit
-        Destroy(gameObject);
+            Destroy(gameObject);
+        }
     }
 }
