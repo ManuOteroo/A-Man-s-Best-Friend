@@ -13,6 +13,7 @@ TagManager:
   - ZombieBody
   - Spike
   - Zombie
+  - Bird
   layers:
   - Default
   - TransparentFX

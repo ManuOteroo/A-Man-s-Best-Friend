@@ -4,62 +4,59 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    
     public float speed = 20f;
-
-    
     public int damage = 20;
 
     private Rigidbody2D rb;
 
     void Start()
     {
-       
         rb = GetComponent<Rigidbody2D>();
-
-        
-        if (rb == null)
+        if (rb != null)
         {
-            return;
+            rb.velocity = transform.right * speed;
         }
-
-        rb.velocity = transform.right * speed;
     }
 
-    
+    // 💥 Detect collisions with zombies
     void OnCollisionEnter2D(Collision2D collision)
     {
-        
-        if (collision.gameObject.CompareTag("ZombieHead"))
-        {
-            
-            ZombieHealth zombieHealth = collision.transform.parent.GetComponent<ZombieHealth>();
+        GameObject hit = collision.gameObject;
 
-            
+        if (hit.CompareTag("ZombieHead"))
+        {
+            ZombieHealth zombieHealth = hit.transform.parent.GetComponent<ZombieHealth>();
             if (zombieHealth != null)
             {
                 zombieHealth.TakeDamage(70);
             }
-
-            
-            Destroy(gameObject);
         }
-        // if the bullet hits the zombie's body
-        else if (collision.gameObject.CompareTag("Zombie"))
+        else if (hit.CompareTag("Zombie"))
         {
-            ZombieHealth zombieHealth = collision.gameObject.GetComponentInParent<ZombieHealth>();
-
+            ZombieHealth zombieHealth = hit.GetComponentInParent<ZombieHealth>();
             if (zombieHealth != null)
             {
                 zombieHealth.TakeDamage(30);
             }
+        }
+
+        Destroy(gameObject);
+    }
+
+    // 🐦 Detect trigger hits with birds
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Bird"))
+        {
+            BirdEnemy bird = other.GetComponent<BirdEnemy>();
+            if (bird != null)
+            {
+                bird.TakeDamage(damage);
+            }
 
             Destroy(gameObject);
         }
-        else
-        {
-            // destroy the bullet if it hits anything else 
-            Destroy(gameObject);
-        }
     }
+
+
 }
