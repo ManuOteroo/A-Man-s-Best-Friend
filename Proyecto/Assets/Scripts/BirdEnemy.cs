@@ -22,8 +22,6 @@ public class BirdEnemy : MonoBehaviour
 
     void Start()
     {
-        
-
         startPosition = transform.position + idleOffset;
         animator = GetComponent<Animator>();
         birdCollider = GetComponent<Collider2D>();
@@ -32,7 +30,6 @@ public class BirdEnemy : MonoBehaviour
         if (rb != null)
         {
             rb.bodyType = RigidbodyType2D.Kinematic;
-            rb.velocity = Vector2.zero;
             rb.gravityScale = 0f;
         }
 
@@ -64,7 +61,7 @@ public class BirdEnemy : MonoBehaviour
     {
         transform.position = startPosition + new Vector3(0, Mathf.Sin(Time.time * 2f) * 0.5f, 0);
         Vector3 direction = player.position - transform.position;
-        transform.right = -direction.normalized; // For left-facing sprites
+        transform.right = -direction.normalized; // for left-facing sprite
     }
 
     public void TakeDamage(int damage)
@@ -91,7 +88,7 @@ public class BirdEnemy : MonoBehaviour
         }
 
         if (birdCollider != null)
-            birdCollider.isTrigger = false;
+            birdCollider.isTrigger = true; // player can walk through
 
         if (rb != null)
         {
@@ -101,6 +98,7 @@ public class BirdEnemy : MonoBehaviour
         }
 
         StartCoroutine(SnapToGroundAfterFall());
+        StartCoroutine(FreezeBirdAfterFall());
 
         Destroy(gameObject, 5f);
     }
@@ -121,7 +119,6 @@ public class BirdEnemy : MonoBehaviour
             yield return null;
         }
 
-        // Damage the player directly
         Health playerHealth = player.GetComponent<Health>();
         if (playerHealth != null && !playerHealth.isDead)
         {
@@ -184,5 +181,13 @@ public class BirdEnemy : MonoBehaviour
             newPos.y = hit.point.y + bounds.extents.y;
             transform.position = newPos;
         }
+    }
+
+    IEnumerator FreezeBirdAfterFall()
+    {
+        yield return new WaitForSeconds(0.4f);
+
+        if (rb != null)
+            rb.bodyType = RigidbodyType2D.Static; // Freeze after falling
     }
 }
