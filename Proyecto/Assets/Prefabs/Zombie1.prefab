@@ -251,7 +251,7 @@ Transform:
   m_GameObject: {fileID: 6561748876212584819}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -226.56, y: -29.31, z: 2.13}
+  m_LocalPosition: {x: -232.32, y: -29.31, z: 3.37}
   m_LocalScale: {x: 5.6607714, y: 5.472098, z: 5.6607714}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -300,7 +300,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 3524189736090050644, guid: ec164d47f287a8646b00c0a78588f314, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -440,6 +440,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   isDead: 0
+  deathSoundClip: {fileID: 8300000, guid: 6078ea9f88b4fd44ca83a5b12e972556, type: 3}
 --- !u!82 &9133377122326944347
 AudioSource:
   m_ObjectHideFlags: 0
@@ -447,14 +448,14 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6561748876212584819}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: f838410ae232cb94a9b49296ca372640, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 6078ea9f88b4fd44ca83a5b12e972556, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.165
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
