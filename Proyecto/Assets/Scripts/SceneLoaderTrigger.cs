@@ -1,17 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SceneLoaderTrigger : MonoBehaviour
 {
-    public string nextSceneName; 
+    public string nextSceneName;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            SceneManager.LoadScene(nextSceneName);
+            FadeController fade = FindObjectOfType<FadeController>();
+            if (fade != null)
+            {
+                fade.FadeAndLoadScene(nextSceneName);
+            }
         }
     }
 }
