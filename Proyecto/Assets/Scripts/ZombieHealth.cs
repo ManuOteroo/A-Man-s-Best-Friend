@@ -10,10 +10,20 @@ public class ZombieHealth : MonoBehaviour
 
     private Animator anim;
 
+    public AudioClip deathSoundClip; 
+    private AudioSource audioSource;
+
     void Start()
     {
         currentHealth = maxHealth;
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
+
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+        }
     }
 
     public void TakeDamage(int amount)
@@ -32,6 +42,11 @@ public class ZombieHealth : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
+
+        if (deathSoundClip != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(deathSoundClip);
+        }
 
         if (anim != null)
         {
@@ -65,25 +80,22 @@ public class ZombieHealth : MonoBehaviour
             }
         }
     }
+
     private IEnumerator HoldFinalDeathFrame()
     {
-        yield return new WaitForSeconds(0.1f); // let animation trigger start
+        yield return new WaitForSeconds(0.1f);
 
-        // Wait until animation actually enters the Die state
         while (!anim.GetCurrentAnimatorStateInfo(0).IsName("Die"))
             yield return null;
 
-        // Wait until the animation finishes
         while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.98f)
             yield return null;
 
-        // Freeze the animator at the last frame
         AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
         anim.Play(state.fullPathHash, 0, 0.99f);
         anim.Update(0f);
         anim.enabled = false;
     }
-
 
     public int GetCurrentHealth()
     {
