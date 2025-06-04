@@ -19,7 +19,6 @@ public class ZombieMovement : MonoBehaviour
     private bool isDead = false;
     private Vector3 originalScale;
 
-    [Header("Walk Animation Loop Settings")]
     public string walkStateName = "Walk";
     public float walkTotalDuration = 1.75f;
     public int loopStartFrame = 10;
@@ -57,7 +56,7 @@ public class ZombieMovement : MonoBehaviour
         float diffX = player.position.x - transform.position.x;
         int moveDirection = 0;
 
-        if (Mathf.Abs(diffX) > 0.1f) // evitar flip constante
+        if (Mathf.Abs(diffX) > 0.1f)
         {
             moveDirection = (diffX > 0) ? 1 : -1;
         }
@@ -134,36 +133,41 @@ public class ZombieMovement : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (isDead) return;
+        if (isDead || isAttacking || player == null) return;
 
-        if (other.CompareTag("Player") && Time.time >= nextAttackTime && !isAttacking)
+        if (other.CompareTag("Player") && Time.time >= nextAttackTime)
         {
             rb.velocity = Vector2.zero;
             isMoving = false;
             playedIntro = false;
             loopTimer = 0f;
             anim.speed = 1f;
-            AttackPlayer(other.GetComponent<Health>());
+
+            Health playerHealth = other.GetComponent<Health>();
+            if (playerHealth != null)
+            {
+                AttackPlayer(playerHealth);
+            }
         }
     }
 
     void AttackPlayer(Health playerHealth)
     {
-        if (isDead || isAttacking || anim == null) return;
-
         isAttacking = true;
         nextAttackTime = Time.time + attackCooldown;
 
-        Debug.Log("🧟 Lanzando ataque al jugador");
-        anim.ResetTrigger("Attack");
-        anim.SetTrigger("Attack");
+        if (anim != null)
+        {
+            anim.ResetTrigger("Attack");
+            anim.SetTrigger("Attack");
+        }
 
         if (playerHealth != null)
         {
             playerHealth.TakeDamage(attackDamage);
         }
 
-        Invoke(nameof(ResetAttack), 1f);
+        Invoke(nameof(ResetAttack), 1.1f); // Adjust to match your attack animation duration
     }
 
     void ResetAttack()
