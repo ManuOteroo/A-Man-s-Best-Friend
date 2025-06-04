@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BirdEnemy : MonoBehaviour
@@ -35,7 +34,7 @@ public class BirdEnemy : MonoBehaviour
 
         if (birdCollider != null)
         {
-            birdCollider.isTrigger = true;
+            birdCollider.isTrigger = false; // Use collision for bullets
         }
 
         lastAttackTime = -attackCooldown;
@@ -88,7 +87,7 @@ public class BirdEnemy : MonoBehaviour
         }
 
         if (birdCollider != null)
-            birdCollider.isTrigger = true; // player can walk through
+            birdCollider.isTrigger = true; // allow player to walk through
 
         if (rb != null)
         {
@@ -142,13 +141,13 @@ public class BirdEnemy : MonoBehaviour
         isAttacking = false;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnCollisionEnter2D(Collision2D collision)
     {
         if (isDead) return;
 
-        if (other.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            Health playerHealth = other.GetComponent<Health>();
+            Health playerHealth = collision.gameObject.GetComponent<Health>();
             if (playerHealth != null && !playerHealth.isDead)
             {
                 playerHealth.TakeDamage(20);
@@ -188,6 +187,6 @@ public class BirdEnemy : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
 
         if (rb != null)
-            rb.bodyType = RigidbodyType2D.Static; // Freeze after falling
+            rb.bodyType = RigidbodyType2D.Static;
     }
 }

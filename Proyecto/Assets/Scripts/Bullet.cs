@@ -39,12 +39,29 @@ public class Bullet : MonoBehaviour
                 return;
             }
         }
+        else if (hitObject.CompareTag("Bird"))
+        {
+            BirdEnemy bird = hitObject.GetComponent<BirdEnemy>();
+            if (bird == null)
+            {
+                bird = hitObject.GetComponentInParent<BirdEnemy>();
+            }
+
+            if (bird != null)
+            {
+                bird.TakeDamage(damage);
+                Destroy(gameObject);
+                return;
+            }
+        }
         else if (hitObject.CompareTag("Boss"))
         {
             BossDog dog = hitObject.GetComponent<BossDog>();
             if (dog != null)
             {
                 dog.TakeDamage(damage);
+                Destroy(gameObject);
+                return;
             }
         }
 
