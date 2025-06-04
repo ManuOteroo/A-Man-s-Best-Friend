@@ -23,7 +23,9 @@ public class FinalSceneController : MonoBehaviour
     public float suicideDelay = 2.5f;
     public float gunshotDelay = 3.2f;
 
-    public string mainMenuSceneName = "MainMenu"; // Set your menu scene name here
+    public string mainMenuSceneName = "MainMenu";
+
+    public AudioSource backgroundMusicSource;
 
     private bool cutsceneTriggered = false;
     private AudioSource audioSource;
@@ -46,6 +48,9 @@ public class FinalSceneController : MonoBehaviour
     {
         if (cutsceneTriggered) return;
         cutsceneTriggered = true;
+
+        if (backgroundMusicSource != null)
+            backgroundMusicSource.Stop();
 
         if (uiCanvas != null)
             uiCanvas.SetActive(false);
