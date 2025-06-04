@@ -19,4 +19,9 @@ public class MainMenu : MonoBehaviour
         Debug.Log("Game Quit!"); 
         Application.Quit(); 
     }
+
+    public void LoadIntro()
+    {
+        SceneManager.LoadScene("IntroCutscene");
+    }
 }
