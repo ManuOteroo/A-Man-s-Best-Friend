@@ -1,33 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using UnityEngine.U2D; 
+using UnityEngine.SceneManagement;
 
 public class FinalSceneController : MonoBehaviour
 {
     public Transform player;
     public Camera mainCamera;
-    public float zoomSpeed = 2f;
-    public float targetZoom = 3f;
-    public Vector3 cameraOffset = new Vector3(0, 1f, -10f);
+    public float targetZoom = 3.5f;
+    public float zoomSpeed = 8f;
+    public Vector3 cameraOffset = new Vector3(0, 0.5f, 0);
 
-    [Header("UI")]
     public Image blackoutPanel;
     public GameObject uiCanvas;
     public GameObject ammoCanvas;
 
-    [Header("Audio Clips")]
     public AudioClip cryingClip;
     public AudioClip gunshotClip;
     public AudioClip finalSongClip;
 
-    [Header("Timing")]
     public float cryingDelay = 0.5f;
     public float suicideDelay = 2.5f;
     public float gunshotDelay = 3.2f;
 
-    [Header("Optional")]
-    public PixelPerfectCamera pixelPerfectCamera;
+    public string mainMenuSceneName = "MainMenu"; // Set your menu scene name here
 
     private bool cutsceneTriggered = false;
     private AudioSource audioSource;
@@ -51,9 +47,6 @@ public class FinalSceneController : MonoBehaviour
         if (cutsceneTriggered) return;
         cutsceneTriggered = true;
 
-        if (pixelPerfectCamera != null)
-            pixelPerfectCamera.enabled = false;
-
         if (uiCanvas != null)
             uiCanvas.SetActive(false);
         if (ammoCanvas != null)
@@ -66,7 +59,6 @@ public class FinalSceneController : MonoBehaviour
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
         }
 
-        
         MonoBehaviour[] scripts = player.GetComponents<MonoBehaviour>();
         foreach (MonoBehaviour script in scripts)
         {
@@ -74,7 +66,6 @@ public class FinalSceneController : MonoBehaviour
                 script.enabled = false;
         }
 
-       
         Animator anim = player.GetComponent<Animator>();
         if (anim != null)
         {
@@ -96,25 +87,29 @@ public class FinalSceneController : MonoBehaviour
 
     IEnumerator CameraZoomCutscene()
     {
-        while (mainCamera.orthographicSize > targetZoom)
+        float duration = 0.5f;
+        float time = 0f;
+
+        float startZoom = mainCamera.orthographicSize;
+        float endZoom = targetZoom;
+
+        Vector3 startPos = mainCamera.transform.position;
+        Vector3 endPos = player.position + cameraOffset;
+        endPos.z = -10f;
+
+        while (time < duration)
         {
-            mainCamera.orthographicSize = Mathf.MoveTowards(
-                mainCamera.orthographicSize,
-                targetZoom,
-                zoomSpeed * Time.deltaTime
-            );
+            float t = time / duration;
 
-            Vector3 targetPos = player.position + cameraOffset;
-            targetPos.z = -10f;
+            mainCamera.orthographicSize = Mathf.Lerp(startZoom, endZoom, t);
+            mainCamera.transform.position = Vector3.Lerp(startPos, endPos, t);
 
-            mainCamera.transform.position = Vector3.Lerp(
-                mainCamera.transform.position,
-                targetPos,
-                Time.deltaTime * zoomSpeed
-            );
-
+            time += Time.unscaledDeltaTime;
             yield return null;
         }
+
+        mainCamera.orthographicSize = endZoom;
+        mainCamera.transform.position = endPos;
     }
 
     IEnumerator SuicideSequence()
@@ -150,6 +145,10 @@ public class FinalSceneController : MonoBehaviour
             audioSource.clip = finalSongClip;
             audioSource.loop = false;
             audioSource.Play();
+
+            yield return new WaitForSeconds(finalSongClip.length);
         }
+
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 }
