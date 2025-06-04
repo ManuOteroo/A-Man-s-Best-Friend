@@ -28,12 +28,6 @@ public class BossDog : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
-        if (player == null)
-        {
-            Debug.LogError("No se encontró el jugador con la etiqueta 'Player'");
-            enabled = false;
-            return;
-        }
 
         if (animator == null) animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
@@ -45,6 +39,13 @@ public class BossDog : MonoBehaviour
     void Update()
     {
         if (isDead) return;
+
+        // Reasignar el player si aún no se ha encontrado
+        if (player == null)
+        {
+            player = GameObject.FindGameObjectWithTag("Player")?.transform;
+            if (player == null) return;
+        }
 
         float distance = Vector3.Distance(transform.position, player.position);
 
@@ -95,6 +96,10 @@ public class BossDog : MonoBehaviour
             {
                 playerHealth.TakeDamage((int)damage);
             }
+            else
+            {
+                Debug.LogWarning("No se encontró el componente Health en el jugador.");
+            }
         }
 
         yield return new WaitForSeconds(0.4f);
@@ -141,7 +146,6 @@ public class BossDog : MonoBehaviour
 
         this.enabled = false;
 
-        // Trigger final scene AFTER delay to allow gunshot to finish
         StartCoroutine(DelayedCutsceneTrigger());
     }
 
@@ -160,7 +164,7 @@ public class BossDog : MonoBehaviour
 
     IEnumerator DelayedCutsceneTrigger()
     {
-        yield return new WaitForSeconds(0.5f); // Delay so gunshot plays fully
+        yield return new WaitForSeconds(0.5f);
         FinalSceneController controller = FindObjectOfType<FinalSceneController>();
         if (controller != null)
         {
