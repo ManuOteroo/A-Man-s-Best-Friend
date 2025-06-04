@@ -231,6 +231,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5650695390761905866, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 614963364}
     - target: {fileID: 6561748876212584819, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
       propertyPath: m_Name
       value: Zombie1 (2)
@@ -372,6 +376,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5650695390761905866, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 614963364}
     - target: {fileID: 6561748876212584819, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
       propertyPath: m_Name
       value: Zombie1 (4)
@@ -429,6 +437,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5650695390761905866, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 614963364}
     - target: {fileID: 6561748876212584819, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
       propertyPath: m_Name
       value: Zombie1 (5)
@@ -634,6 +646,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2354068451010946594, guid: daccf6b502a25bb4ea5bc1469c1b1dc2, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 614963364}
     - target: {fileID: 7471870687465683423, guid: daccf6b502a25bb4ea5bc1469c1b1dc2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 163.74841
@@ -1810,7 +1826,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 9999
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!114 &510198497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2068,7 +2088,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 5
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!61 &545465250
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2122,6 +2146,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5650695390761905866, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 614963364}
     - target: {fileID: 6561748876212584819, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
       propertyPath: m_Name
       value: Zombie1 (6)
@@ -2425,6 +2453,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dbde998c95f28c48a3ee74d48fc7044, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &614963372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614963363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddb20c37b3da7b64fb1316ef27af2c0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageAmount: 100
 --- !u!1 &643587373
 GameObject:
   m_ObjectHideFlags: 0
@@ -2588,7 +2629,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 9999
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!1 &691626401
 GameObject:
   m_ObjectHideFlags: 0
@@ -3482,6 +3527,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 614758158711620249, guid: 68a4c6194b7299346ba571128f314e65, type: 3}
       insertIndex: -1
       addedObject: {fileID: 614963366}
+    - targetCorrespondingSourceObject: {fileID: 614758158711620249, guid: 68a4c6194b7299346ba571128f314e65, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 614963372}
   m_SourcePrefab: {fileID: 100100000, guid: 68a4c6194b7299346ba571128f314e65, type: 3}
 --- !u!1 &979284961 stripped
 GameObject:
@@ -3505,7 +3553,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 10
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!61 &979284966
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3559,6 +3611,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5650695390761905866, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 614963364}
     - target: {fileID: 6561748876212584819, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
       propertyPath: m_Name
       value: Zombie1 (1)
@@ -3708,7 +3764,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 9999
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!114 &1057524052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3843,6 +3903,10 @@ PrefabInstance:
       propertyPath: m_Simulated
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5650695390761905866, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 614963364}
     - target: {fileID: 6561748876212584819, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
       propertyPath: m_Name
       value: Zombie1
@@ -4665,7 +4729,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 9999
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!114 &1480485330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5069,7 +5137,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 9999
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!114 &1616492631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26516,6 +26588,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5650695390761905866, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 614963364}
     - target: {fileID: 6561748876212584819, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
       propertyPath: m_Name
       value: Zombie1 (7)
@@ -27040,6 +27116,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5650695390761905866, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 614963364}
     - target: {fileID: 6561748876212584819, guid: 7b15c8375ad334c4b895a1c32aca42c8, type: 3}
       propertyPath: m_Name
       value: Zombie1 (3)
@@ -27231,6 +27311,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2354068451010946594, guid: daccf6b502a25bb4ea5bc1469c1b1dc2, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 614963364}
     - target: {fileID: 7471870687465683423, guid: daccf6b502a25bb4ea5bc1469c1b1dc2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 75.73

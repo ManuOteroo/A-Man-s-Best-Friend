@@ -210,7 +210,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 9999
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!114 &32792495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18174,7 +18178,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 10
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!4 &188178236 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7878350319992209165, guid: 09c4a9864c0136d4285b15960ce3716c, type: 3}
@@ -18454,7 +18462,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 9999
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!114 &247994656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19458,7 +19470,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 9999
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!114 &588608593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19613,7 +19629,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 5
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!61 &614708126
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -20058,7 +20078,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 5
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!61 &734188010
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -20338,7 +20362,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 9999
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!114 &812157292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21018,7 +21046,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 9999
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!114 &1043843697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21468,7 +21500,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 9999
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!114 &1132107221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22373,10 +22409,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.16666667
+    x: 0
     y: 0
     width: 1
-    height: 0.43888888
+    height: 1
   near clip plane: 2.11
   far clip plane: 1000
   field of view: 34
@@ -23274,7 +23310,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 5
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!61 &1568966724
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -23699,13 +23739,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1192266730}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db0bb7b22df20d14eab14336833ff2b7, type: 3}
+  m_Script: {fileID: 11500000, guid: ddb20c37b3da7b64fb1316ef27af2c0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footstepClips:
-  - {fileID: 8300000, guid: 20eb6bac1d147dc49a4cfbe51ca7f0f4, type: 3}
-  stepRate: 1
-  minSpeed: 0.1
+  damageAmount: 100
 --- !u!82 &1673026032
 AudioSource:
   m_ObjectHideFlags: 0
@@ -23963,7 +24000,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7add4fcb5457474ba440e137f9db4c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 9999
+  player: {fileID: 0}
+  mainCamera: {fileID: 0}
+  zoomDuration: 2
+  finalDelay: 1
+  suicideTrigger: Suicide
 --- !u!114 &1727776869
 MonoBehaviour:
   m_ObjectHideFlags: 0
