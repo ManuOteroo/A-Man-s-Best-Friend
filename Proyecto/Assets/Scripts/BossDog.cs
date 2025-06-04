@@ -1,4 +1,5 @@
-using UnityEngine;
+ï»¿using UnityEngine;
+using System.Collections;
 
 public class BossDog : MonoBehaviour
 {
@@ -21,17 +22,22 @@ public class BossDog : MonoBehaviour
     private bool isDead = false;
     private bool isAttacking = false;
 
+    private Rigidbody2D rb;
+    private Collider2D col;
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         if (player == null)
         {
-            Debug.LogError("No se encontró el jugador con la etiqueta 'Player'");
+            Debug.LogError("No se encontrÃ³ el jugador con la etiqueta 'Player'");
             enabled = false;
             return;
         }
 
         if (animator == null) animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<Collider2D>();
 
         currentHealth = maxHealth;
     }
@@ -73,13 +79,13 @@ public class BossDog : MonoBehaviour
             transform.localScale = new Vector3(-1, 1, 1);
     }
 
-    System.Collections.IEnumerator PerformAttack()
+    IEnumerator PerformAttack()
     {
         isAttacking = true;
         lastAttackTime = Time.time;
         animator.SetTrigger("attack");
 
-        yield return new WaitForSeconds(0.4f); // espera antes del daño
+        yield return new WaitForSeconds(0.4f);
 
         float distance = Vector3.Distance(transform.position, player.position);
         if (distance <= attackRange)
@@ -91,8 +97,7 @@ public class BossDog : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(0.4f); // espera tras el golpe
-
+        yield return new WaitForSeconds(0.4f);
         isAttacking = false;
     }
 
@@ -101,7 +106,6 @@ public class BossDog : MonoBehaviour
         if (isDead) return;
 
         currentHealth -= dmg;
-        Debug.Log("Perro recibió daño: " + dmg + " | Vida actual: " + currentHealth);
 
         if (currentHealth <= 0)
         {
@@ -112,8 +116,55 @@ public class BossDog : MonoBehaviour
     void Die()
     {
         isDead = true;
-        animator.SetTrigger("die");
-        GetComponent<Collider2D>().enabled = false;
+
+        if (animator != null)
+        {
+            animator.enabled = true;
+            animator.speed = 1f;
+            animator.SetBool("isRunning", false);
+            animator.SetBool("isAttacking", false);
+            animator.SetTrigger("die");
+
+            StartCoroutine(FreezeAtEndOfDeath());
+        }
+
+        if (rb != null)
+        {
+            rb.velocity = Vector2.zero;
+            rb.bodyType = RigidbodyType2D.Static;
+        }
+
+        if (col != null)
+        {
+            col.enabled = false;
+        }
+
         this.enabled = false;
+
+        // Trigger final scene AFTER delay to allow gunshot to finish
+        StartCoroutine(DelayedCutsceneTrigger());
+    }
+
+    IEnumerator FreezeAtEndOfDeath()
+    {
+        yield return new WaitUntil(() =>
+            animator.GetCurrentAnimatorStateInfo(0).IsName("Die") &&
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.98f
+        );
+
+        AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+        animator.Play(state.fullPathHash, 0, 0.99f);
+        animator.Update(0f);
+        animator.enabled = false;
+    }
+
+    IEnumerator DelayedCutsceneTrigger()
+    {
+        yield return new WaitForSeconds(0.5f); // Delay so gunshot plays fully
+        FinalSceneController controller = FindObjectOfType<FinalSceneController>();
+        if (controller != null)
+        {
+            controller.TriggerFinalCutscene();
+        }
     }
 }
