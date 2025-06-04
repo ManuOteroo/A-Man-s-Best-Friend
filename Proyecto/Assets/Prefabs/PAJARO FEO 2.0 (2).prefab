@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8958fee8891bd6c40a623c8588c91a39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 2921713098439070658, guid: 68a4c6194b7299346ba571128f314e65, type: 3}
+  player: {fileID: 0}
   detectionRange: 20
   attackSpeed: 10
   returnSpeed: 5
