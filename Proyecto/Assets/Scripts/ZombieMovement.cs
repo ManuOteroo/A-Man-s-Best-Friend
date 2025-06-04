@@ -51,15 +51,22 @@ public class ZombieMovement : MonoBehaviour
 
     void FollowPlayer()
     {
+        if (isAttacking) return;
+
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-        int moveDirection = (player.position.x > transform.position.x) ? 1 : -1;
+        float diffX = player.position.x - transform.position.x;
+        int moveDirection = 0;
+
+        if (Mathf.Abs(diffX) > 0.1f) // evitar flip constante
+        {
+            moveDirection = (diffX > 0) ? 1 : -1;
+        }
 
         if (distanceToPlayer < followDistance)
         {
             rb.velocity = new Vector2(speed * moveDirection, rb.velocity.y);
 
             AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
-
             float loopStartNorm = (float)(loopStartFrame - 1) / loopEndFrame;
 
             if (!playedIntro)
@@ -79,7 +86,6 @@ public class ZombieMovement : MonoBehaviour
             }
             else
             {
-                // Force animation to stay in the loop range
                 if (!state.IsName(walkStateName))
                 {
                     anim.Play(walkStateName, 0, (float)(loopStartFrame - 1) / loopEndFrame);
@@ -98,7 +104,11 @@ public class ZombieMovement : MonoBehaviour
             }
 
             isMoving = true;
-            FlipZombie(moveDirection);
+
+            if (moveDirection != 0)
+            {
+                FlipZombie(moveDirection);
+            }
         }
         else
         {
@@ -139,11 +149,14 @@ public class ZombieMovement : MonoBehaviour
 
     void AttackPlayer(Health playerHealth)
     {
-        if (isDead) return;
+        if (isDead || isAttacking || anim == null) return;
 
         isAttacking = true;
-        anim.SetTrigger("Attack");
         nextAttackTime = Time.time + attackCooldown;
+
+        Debug.Log("🧟 Lanzando ataque al jugador");
+        anim.ResetTrigger("Attack");
+        anim.SetTrigger("Attack");
 
         if (playerHealth != null)
         {

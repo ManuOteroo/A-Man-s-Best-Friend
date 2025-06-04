@@ -17,9 +17,31 @@ public class Bullet : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Boss")) // Asegúrate de que el perro tenga este tag
+        GameObject hitObject = collision.gameObject;
+
+        if (hitObject.CompareTag("ZombieHead"))
         {
-            BossDog dog = collision.gameObject.GetComponent<BossDog>();
+            ZombieHealth zombie = hitObject.GetComponentInParent<ZombieHealth>();
+            if (zombie != null)
+            {
+                zombie.TakeDamage(damage * 2);
+                Destroy(gameObject);
+                return;
+            }
+        }
+        else if (hitObject.CompareTag("Zombie"))
+        {
+            ZombieHealth zombie = hitObject.GetComponentInParent<ZombieHealth>();
+            if (zombie != null)
+            {
+                zombie.TakeDamage(damage);
+                Destroy(gameObject);
+                return;
+            }
+        }
+        else if (hitObject.CompareTag("Boss"))
+        {
+            BossDog dog = hitObject.GetComponent<BossDog>();
             if (dog != null)
             {
                 dog.TakeDamage(damage);
