@@ -295,7 +295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62097d150babff84e974497a08e533fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 150
+  maxHealth: 600
   isDead: 0
   deathSoundClip: {fileID: 8300000, guid: 6078ea9f88b4fd44ca83a5b12e972556, type: 3}
 --- !u!82 &4779634235587369237

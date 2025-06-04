@@ -88,6 +88,8 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
 
+
+
         if (audioSource != null && clickSound != null)
         {
             audioSource.PlayOneShot(clickSound);
