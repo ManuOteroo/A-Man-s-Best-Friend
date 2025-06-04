@@ -3790,6 +3790,10 @@ PrefabInstance:
       propertyPath: bulletIcons.Array.data[4]
       value: 
       objectReference: {fileID: 961626345}
+    - target: {fileID: 4984448789639287111, guid: 68a4c6194b7299346ba571128f314e65, type: 3}
+      propertyPath: m_Volume
+      value: 0.19
+      objectReference: {fileID: 0}
     - target: {fileID: 6170440713684495233, guid: 68a4c6194b7299346ba571128f314e65, type: 3}
       propertyPath: m_Name
       value: Player1 (1)
